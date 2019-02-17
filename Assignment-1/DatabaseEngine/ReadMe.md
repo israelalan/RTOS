@@ -28,7 +28,7 @@ Input should be given as follows.
 
 *GET [File_Name].txt*
 
-For example, there is marks.txt file in the server_dir directory. On giving " **GET marks.txt ** " the contents of the file
+For example, there is marks.txt file in the server_dir directory. On giving "GET marks.txt" the contents of the file
 have to written from the server to the client's message queue. The output was as follows.
 
 *Hello All*
