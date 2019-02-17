@@ -10,16 +10,23 @@ The server has a message queue of it's own. This queue is used to take in the re
 
 To start the server, run the following commands.
 *gcc server.c -o server*
+
 *./server*
 
 To start the clients, run the following commands. Since there are only two clients here, we shall execute both.
+
 *gcc clientA.c -o clientA*
+
 *gcc clientB.c -o clientB*
+
 *./clientA*
+
 *./clientB*
 
 In order to check the working of the Echo Engine, here are few examples that can be tried.
+
 > aBc -->ouput: AbC
+
 > hello ALAN -->ouput: HELLO alan
 
 ## Performance Data
