@@ -31,4 +31,14 @@ In order to check the working of the Echo Engine, here are few examples that can
 
 ## Performance Data
 
-The performance data was unable to be computed or even predicted. The results shown by the processor timer which runs in the client program were unreasonable. This could be because of the numerous background processes run inside the kernel. 
+The performance data was unable to be made sense of or even predicted. The results shown by the processor timer which runs in the client program were unreasonable. This could be because of the numerous background processes run inside the kernel. 
+
+Here is the timing data received from the clients. The time was calculated from when the request was sent from the client to the time until the response from server came back. The time was computed for different cases - on running single client, two clients and five clients. The data in the table is is the order of **microseconds**. 
+
+Sl.No | 1 client | 2 clients | 5 clients
+------|----------|-----------|----------
+1 | 11 | 8 | 11
+2 | 12 | 7 | 7
+3 | 7 | 45 | 7
+4 | 11 | 8 | 11
+5 | 7 | 9 | 12
