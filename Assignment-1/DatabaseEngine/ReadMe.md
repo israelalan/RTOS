@@ -31,12 +31,24 @@ Input should be given as follows.
 For example, there is marks.txt file in the server_dir directory. On giving "GET marks.txt" the contents of the file
 have to written from the server to the client's message queue. The output was as follows.
 
-*Hello All*
+> Hello All
 
-*I am Alan*
+> I am Alan
 
 ## Performance Data
 
-The performance data was unable to be computed or even predicted. On running the clients on multiple windows,
+The performance data was unable to be made sense of or even predicted. On running the clients on multiple windows,
 it was not possible to raise requests parallely. And the time computed by the processor timer was not reasonable and hence
 could not come to any conclusion with the data points.
+
+Here is the data collected from the timer used in the client to calculate the time of response from server. The data looks
+scattered. The data is collected for different cases - on running single client, two clients and five clients.The data is in 
+the order of **microseconds**.
+
+Sl.No | 1 client | 2 clients | 5 clients
+------|----------|-----------|----------
+1 | 12490 | 39 | 23
+2 | 54 | 19 | 22
+3 | 54 | 20 | 23
+4 | 22 | 42 | 17
+5 | 19 | 53 | 20
