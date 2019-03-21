@@ -3,6 +3,7 @@
 #include <time.h> 
 #include <pthread.h>
 #include <semaphore.h>
+#include <sys/time.h>
 
 pthread_cond_t cond1  =  
                PTHREAD_COND_INITIALIZER; 
@@ -14,6 +15,8 @@ pthread_cond_t cond4  =
                PTHREAD_COND_INITIALIZER;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 int done = 1;
+
+struct timeval start, stop;
 
 void * player1(void *n){
 	while(1){
@@ -50,7 +53,8 @@ void * player1(void *n){
 
 		if(move==100){
 			printf("player1 wins\n");
-			printf("%d\n",move );
+			gettimeofday(&stop, NULL);
+            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
 			exit(0);
 		}
 
@@ -112,7 +116,8 @@ void * player2(void *n){
 
 		if(move>=100){
 			printf("player2 wins\n");
-			printf("%d\n",move );
+			gettimeofday(&stop, NULL);
+            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
 			exit(0);
 		}
 
@@ -174,7 +179,8 @@ void * player3(void *n){
 
 		if(move>=100){
 			printf("player3 wins\n");
-			printf("%d\n",move );
+			gettimeofday(&stop, NULL);
+            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
 			exit(0);
 		}
 
@@ -236,7 +242,8 @@ void * player4(void *n){
 
 		if(move>=100){
 			printf("player4 wins\n");
-			printf("%d\n",move );
+            gettimeofday(&stop, NULL);
+            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
 			exit(0);
 		}
 
@@ -271,7 +278,8 @@ int main(){
     pthread_create(&tid2, NULL, player2, (void *)&n2); 
     pthread_create(&tid3, NULL, player3, (void *)&n3); 
     pthread_create(&tid4, NULL, player4, (void *)&n4); 
-      
+    
+    gettimeofday(&start, NULL);
     // infinite loop to avoid exit of a program/process 
     while(1); 
       
