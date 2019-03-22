@@ -13,8 +13,11 @@ pthread_cond_t cond3  =
                PTHREAD_COND_INITIALIZER;
 pthread_cond_t cond4  =  
                PTHREAD_COND_INITIALIZER;
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-int done = 1;
+pthread_mutex_t lock1 = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t lock2 = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t lock3 = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t lock4 = PTHREAD_MUTEX_INITIALIZER;
+int done = 0;
 
 struct timeval start, stop;
 
@@ -23,23 +26,101 @@ void * player1(void *n){
 		static int move = 0;
 		static int state = 0;
 
-		pthread_mutex_lock(&lock); 
-                   
-        if (done != (int)*(int*)n) {    
-                // value of done and n is not equal, 
-                // hold wait lock on condition varible 
-            if ((int)*(int*)n == 1) { 
-                    pthread_cond_wait(&cond1, &lock); 
-            } else if ((int)*(int*)n == 2) { 
-                    pthread_cond_wait(&cond2, &lock); 
-            }
-            else if ((int)*(int*)n == 3) { 
-                    pthread_cond_wait(&cond3, &lock); 
-            } 
-            else { 
-                    pthread_cond_wait(&cond4, &lock); 
-            } 
-        }
+		pthread_mutex_lock(&lock1); 
+        pthread_cond_wait(&cond1, &lock1); 
+		int dice;
+		if(move<100){
+			dice = rand() % 6 + 1;
+			move = move + dice;
+		}
+		if(move>100){
+			move = move - dice;
+		}
+
+		if(move==100){
+			printf("player1 wins\n");
+			gettimeofday(&stop, NULL);
+            done = 1;
+            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
+			pthread_exit(NULL);
+            exit(0);
+		}
+        pthread_mutex_unlock(&lock1);
+
+	}
+	return NULL;
+}
+
+void * player2(void *n){
+	while(1){
+		static int move = 0;
+		static int state = 0;
+
+		pthread_mutex_lock(&lock2); 
+        pthread_cond_wait(&cond2, &lock2); 
+		int dice;
+		if(move<100){
+			dice = rand() % 6 + 1;
+			move = move + dice;
+		}
+
+		if(move>100){
+			move = move - dice;
+		}
+
+		if(move==100){
+			printf("player2 wins\n");
+			gettimeofday(&stop, NULL);
+            done = 1;
+            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
+			pthread_exit(NULL);
+            exit(0);
+		}
+        pthread_mutex_unlock(&lock2);
+
+	}
+	return NULL;
+}
+
+void * player3(void *n){
+	while(1){
+		static int move = 0;
+		static int state = 0;
+
+		pthread_mutex_lock(&lock3); 
+        pthread_cond_wait(&cond3, &lock3); 
+		int dice;
+		if(move<100){
+			dice = rand() % 6 + 1;
+			move = move + dice;
+		}
+
+		if(move>100){
+			move = move - dice;
+		}
+
+		if(move==100){
+			printf("player3 wins\n");
+			gettimeofday(&stop, NULL);
+            done = 1;
+            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
+            pthread_exit(NULL);
+			exit(0);
+		}
+        pthread_mutex_unlock(&lock3);
+
+	}
+	return NULL;
+}
+
+void * player4(void *n){
+	while(1){
+		static int move = 0;
+		static int state = 0;
+
+		pthread_mutex_lock(&lock4); 
+
+        pthread_cond_wait(&cond4, &lock4); 
 
 		int dice;
 		if(move<100){
@@ -52,219 +133,14 @@ void * player1(void *n){
 		}
 
 		if(move==100){
-			printf("player1 wins\n");
-			gettimeofday(&stop, NULL);
-            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
-			exit(0);
-		}
-
-		if (done == 4) { 
-                done = 1; 
-                pthread_cond_signal(&cond1); 
-        } 
-        else if(done == 1) { 
-                done = 2; 
-                pthread_cond_signal(&cond2); 
-        } else if (done == 2) { 
-                done = 3; 
-                pthread_cond_signal(&cond3); 
-        } else if (done == 3) { 
-                done = 4; 
-                pthread_cond_signal(&cond4); 
-        }
-
-          
-        // Finally release mutex 
-        pthread_mutex_unlock(&lock);
-
-	}
-	return NULL;
-}
-
-void * player2(void *n){
-	while(1){
-		static int move = 0;
-		static int state = 0;
-
-		pthread_mutex_lock(&lock); 
-                   
-        if (done != (int)*(int*)n) {    
-                // value of done and n is not equal, 
-                // hold wait lock on condition varible 
-            if ((int)*(int*)n == 1) { 
-                    pthread_cond_wait(&cond1, &lock); 
-            } else if ((int)*(int*)n == 2) { 
-                    pthread_cond_wait(&cond2, &lock); 
-            }
-            else if ((int)*(int*)n == 3) { 
-                    pthread_cond_wait(&cond3, &lock); 
-            } 
-            else { 
-                    pthread_cond_wait(&cond4, &lock); 
-            } 
-        }
-
-		int dice;
-		if(move<100){
-			dice = rand() % 6 + 1;
-			move = move + dice;
-		}
-
-		if(move>100){
-			move = move - dice;
-		}
-
-		if(move>=100){
-			printf("player2 wins\n");
-			gettimeofday(&stop, NULL);
-            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
-			exit(0);
-		}
-
-		if (done == 4) { 
-                done = 1; 
-                pthread_cond_signal(&cond1); 
-        } 
-        else if(done == 1) { 
-                done = 2; 
-                pthread_cond_signal(&cond2); 
-        } else if (done == 2) { 
-                done = 3; 
-                pthread_cond_signal(&cond3); 
-        } else if (done == 3) { 
-                done = 4; 
-                pthread_cond_signal(&cond4); 
-        }
-
-          
-        // Finally release mutex 
-        pthread_mutex_unlock(&lock);
-
-	}
-	return NULL;
-}
-
-void * player3(void *n){
-	while(1){
-		static int move = 0;
-		static int state = 0;
-
-		pthread_mutex_lock(&lock); 
-                   
-        if (done != (int)*(int*)n) {    
-                // value of done and n is not equal, 
-                // hold wait lock on condition varible 
-            if ((int)*(int*)n == 1) { 
-                    pthread_cond_wait(&cond1, &lock); 
-            } else if ((int)*(int*)n == 2) { 
-                    pthread_cond_wait(&cond2, &lock); 
-            }
-            else if ((int)*(int*)n == 3) { 
-                    pthread_cond_wait(&cond3, &lock); 
-            } 
-            else { 
-                    pthread_cond_wait(&cond4, &lock); 
-            } 
-        }
-
-		int dice;
-		if(move<100){
-			dice = rand() % 6 + 1;
-			move = move + dice;
-		}
-
-		if(move>100){
-			move = move - dice;
-		}
-
-		if(move>=100){
-			printf("player3 wins\n");
-			gettimeofday(&stop, NULL);
-            printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
-			exit(0);
-		}
-
-		if (done == 4) { 
-                done = 1; 
-                pthread_cond_signal(&cond1); 
-        } 
-        else if(done == 1) { 
-                done = 2; 
-                pthread_cond_signal(&cond2); 
-        } else if (done == 2) { 
-                done = 3; 
-                pthread_cond_signal(&cond3); 
-        } else if (done == 3) { 
-                done = 4; 
-                pthread_cond_signal(&cond4); 
-        }
-
-          
-        // Finally release mutex 
-        pthread_mutex_unlock(&lock);
-
-	}
-	return NULL;
-}
-
-void * player4(void *n){
-	while(1){
-		static int move = 0;
-		static int state = 0;
-
-		pthread_mutex_lock(&lock); 
-                   
-        if (done != (int)*(int*)n) {    
-                // value of done and n is not equal, 
-                // hold wait lock on condition varible 
-            if ((int)*(int*)n == 1) { 
-                    pthread_cond_wait(&cond1, &lock); 
-            } else if ((int)*(int*)n == 2) { 
-                    pthread_cond_wait(&cond2, &lock); 
-            }
-            else if ((int)*(int*)n == 3) { 
-                    pthread_cond_wait(&cond3, &lock); 
-            } 
-            else { 
-                    pthread_cond_wait(&cond4, &lock); 
-            } 
-        }
-
-		int dice;
-		if(move<100){
-			dice = rand() % 6 + 1;
-			move = move + dice;
-		}
-
-		if(move>100){
-			move = move - dice;
-		}
-
-		if(move>=100){
 			printf("player4 wins\n");
             gettimeofday(&stop, NULL);
+            done = 1;
             printf("%lu\n", (stop.tv_sec - start.tv_sec)*1000000 + (stop.tv_usec - start.tv_usec));
-			exit(0);
+            pthread_exit(NULL);
+            exit(0);
 		}
-
-		if (done == 4) { 
-                done = 1; 
-                pthread_cond_signal(&cond1); 
-        } 
-        else if(done == 1) { 
-                done = 2; 
-                pthread_cond_signal(&cond2); 
-        } else if (done == 2) { 
-                done = 3; 
-                pthread_cond_signal(&cond3); 
-        } else if (done == 3) { 
-                done = 4; 
-                pthread_cond_signal(&cond4); 
-        }
-
-          
-        // Finally release mutex 
-        pthread_mutex_unlock(&lock);
+        pthread_mutex_unlock(&lock4);
 
 	}
 	return NULL;
@@ -280,8 +156,14 @@ int main(){
     pthread_create(&tid4, NULL, player4, (void *)&n4); 
     
     gettimeofday(&start, NULL);
+    pthread_cond_signal(&cond1);
     // infinite loop to avoid exit of a program/process 
-    while(1); 
+    while(!done){
+        pthread_cond_signal(&cond1);
+        pthread_cond_signal(&cond2);
+        pthread_cond_signal(&cond3);
+        pthread_cond_signal(&cond4);
+    } 
       
     return 0;
 }
